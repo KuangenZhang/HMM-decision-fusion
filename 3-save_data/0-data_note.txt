@@ -1,0 +1,14 @@
+score_vec.h5:
+Original classification scores without segmentation and labels, which is to test HMM method.
+
+subject_test_set.h5:
+Segmented classification scores and labels, which is to test RNN, LSTM, and GRU.
+
+training.h5, validation_set.h5, and test_set.h5:
+Random segmented classification scores and labels, which is to train RNN, LSTM, and GRU.
+
+classification_DifferentMethods.mat:
+Original classification scores and decision fusion results based on HMM and HMM + Voting.
+
+classificationAccuracy.mat:
+Original decision fusion accuracy results. 

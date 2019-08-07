@@ -26,11 +26,16 @@ def load_dataset(folder, num_classes = 5):
 
 
 def load_h5(file_path, data_name = '/data', label_name = '/label', 
-            num_classes = 5):
+            num_classes = 5, is_to_categorical = True):
     f = h5py.File(file_path, 'r')
     if data_name in f:
-        return f.get(data_name).value, y_to_categorical(f.get(label_name).value,
-                     num_classes = num_classes) 
+        if is_to_categorical:
+            return f.get(data_name).value, y_to_categorical(f.get(label_name).value,
+                         num_classes = num_classes)
+        else:
+            # The h5 file is generated from the matlab, where the first index is 1.
+            # Here I decrease the label by 1 because the first index in python is 0.
+            return f.get(data_name).value, f.get(label_name).value - 1
     else:
         return [], []
 
