@@ -28,7 +28,16 @@ Further information please contact Kuangen Zhang (kuangen.zhang@alumni.ubc.ca).
 ## Citation
 If you find our work useful in your research, please consider citing:
 
-K. Zhang, W. Zhang, W. Xiao, H. Liu, C. W. de Silva, and C. Fu, “Sequential decision fusion for environmental classification in assistive walking,” *arXiv:1904.11152 [cs]*, Apr. 2019.
+```bash
+@article{zhang_sequential_2019,
+	title = {Sequential decision fusion for environmental classification in assistive walking},
+	urldate = {2019-04-26},
+	journal = {arXiv:1904.11152 [cs]},
+	author = {Zhang, Kuangen and Zhang, Wen and Xiao, Wentao and Liu, Haiyuan and de Silva, Clarence W. and Fu, Chenglong},
+	month = apr,
+	year = {2019}
+}
+```
 
 
 ## License
