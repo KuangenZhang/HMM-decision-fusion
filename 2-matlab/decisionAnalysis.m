@@ -3,7 +3,7 @@ clear all;
 close all;
 clc;
 addpath('D:\4-code\3rd_parties\Matlab\subaxis\');
-dataPath = '../3-save_data/';
+dataPath = 'D:/4-code/project/VisionRobot/0-dataSet/2_Validset_EFRS_processed/';
 load([dataPath,'classification_DifferentMethods.mat']);
 addpath('D:/4-code/project/VisionRobot/2-matlab/visionProcess/');
 %%
@@ -14,8 +14,8 @@ priorMat = [0.8,0.05,0.05,0.05,0.05;
     0.15,0.01,0.03,0.01,0.8];
 backWinLenVec = 1:2:9;
 midWinLenVec = 1:2:11;
-meanAccuracyPredictMat     = zeros(max(backWinLenVec),11);
-meanAccuracyMidFiltMat     = zeros(max(backWinLenVec),11);
+meanAccuracyPredictMat  = zeros(max(backWinLenVec),11);
+meanAccuracyMidFiltMat  = zeros(max(backWinLenVec),11);
 meanAccuracyHmmMat   = zeros(max(backWinLenVec),11);
 accuracyPredictMat = zeros(5,8);
 accuracyBackFiltMat = zeros(5,8);
@@ -26,14 +26,12 @@ accuracyPriorFiltMat = zeros(5,8);
 for backWinLen = backWinLenVec
     backWinLen
     for midWinLen = midWinLenVec
-        tic
         [accCNN,accVoting,accHmm]...
             = DataProcess.calcDecisionAccuracy(priorMat,scoreVecCell,predictLabelsCell,...
             correctLabelsCell,backWinLen,midWinLen);
         meanAccuracyPredictMat(backWinLen, midWinLen) = accCNN(1);
         meanAccuracyMidFiltMat(backWinLen, midWinLen) = accVoting(1);
         meanAccuracyHmmMat(backWinLen, midWinLen) = accHmm(1);
-        toc
     end
 end
 %% 5,6-ClassificationResults
@@ -104,7 +102,7 @@ accStd = zeros(length(midWinLenVec),3,2);
 time_delay_vec = (midWinLenVec+1)/2;
 for midWinLen = midWinLenVec
     for place = 1:2
-        subIdx = 8*(place-1) + [1:8];
+        subIdx = 8*(place-1) + [2:8];
         [accCNN,accVoting,accHmm]...
             = DataProcess.calcDecisionAccuracy(priorMat,...
             scoreVecCell(:,subIdx),predictLabelsCell(:,subIdx),...
@@ -112,6 +110,13 @@ for midWinLen = midWinLenVec
         accMean((midWinLen+1)/2,:,place) = [accCNN(1),accVoting(1),accHmm(1)];
         accStd((midWinLen+1)/2,:,place) = [accCNN(2),accVoting(2),accHmm(2)];
     end
+end
+%%
+acc_mean_cell = cell(1,2);
+acc_std_cell = cell(1,2);
+for i = 1:2
+    acc_mean_cell{i} = accMean(:,:,i);
+    acc_std_cell{i} = accStd(:,:,i);
 end
 fprintf('Finished.\n')
 %% 7-calculate gradient
@@ -153,24 +158,23 @@ for place = 1:2
         'YLim',[0.85,1]);
     set(gca,'LooseInset',get(gca,'TightInset'));
 end
-
-
 FileIO.printFig(fig,figName);
 %% 8,9-DecisionModesComparison
 close all;
 backWinLen = 5;
 midWinLen = 3;
 exe_num = 1;
-% %Indoor
-% fileName = [dataPath,'Amputee_1/Amputee_1_indoor_set_actual (1)'];
-fileName = [dataPath,'Amputee_1/Amputee_1_indoor_set (', num2str(exe_num),')'];
-figName = [figurePath,'8_indoor_decision'];
-subNum = 6;
+%Indoor
+% % fileName = [dataPath,'Amputee_1/Amputee_1_indoor_set_actual (1)'];
+% fileName = [dataPath,'Amputee_1/Amputee_1_indoor_set (', num2str(exe_num),')'];
+% % figName = [figurePath,'8_indoor_decision'];
+% subNum = 6;
+
 %Outdoor
-% % fileName = [dataPath,'Amputee_2/Amputee_2_outdoor_set_actual (1)'];
-% fileName = [dataPath,'Amputee_2/Amputee_2_outdoor_set (', num2str(exe_num),')'];
-% figName = [figurePath,'9_outdoor_decision'];
-% subNum = 15;
+% fileName = [dataPath,'Amputee_2/Amputee_2_outdoor_set_actual (1)'];
+fileName = [dataPath,'Amputee_2/Amputee_2_outdoor_set (', num2str(exe_num),')'];
+% figName = [figurePath,'9_outdoor_decision'];1
+subNum = 15;
 predictLabels = predictLabelsCell{exe_num,subNum};
 correctLabels = correctLabelsCell{exe_num,subNum};
 midFiltLabels = DataProcess.votingFilt1(predictLabels,midWinLen+2,'mid');
@@ -186,7 +190,7 @@ fig = figure('DefaultAxesFontSize',13.5,'Units', ...
 subaxis(1,1,1, 'Spacing', 0.00, 'PaddingLeft', 0.05, 'PaddingBottom', 0.05);
 plotDecisionModes(predictLabels,midFiltLabels,...
     backHmmStates,actualModes,timesVec,legendVec,yLabelVec);
-FileIO.printFig(fig,figName);
+% FileIO.printFig(fig,figName);
 %% 10-ProbabilityVariation
 backWinLen = 5;
 midWinLen = 3;
@@ -208,10 +212,10 @@ for k = 6
         PlotClass.plotMat(timeVec, scoreVec, [{'LG'};{'US'};{'DS'};{'UR'};{'DR'}],...
             lineStyle,cmap);
         ylabel({'Probability';'(CNN)'});
-        [hmmStates,scoreVec] = DataProcess.calcOptimalStates(scoreVec,priorMat,backWinLen);
+        [hmmStates,score_vec_hmm] = DataProcess.calcOptimalStates(scoreVec,priorMat,backWinLen);
         hmmStates = DataProcess.votingFilt1(hmmStates,midWinLen,'mid');
         subaxis(3,1,2, 'Spacing', 0.05, 'PaddingLeft', 0.05, 'PaddingBottom', 0.05);
-        PlotClass.plotMat(timeVec, scoreVec, [{'LG'};{'US'};{'DS'};{'UR'};{'DR'}],...
+        PlotClass.plotMat(timeVec, score_vec_hmm, [{'LG'};{'US'};{'DS'};{'UR'};{'DR'}],...
             lineStyle,cmap);
         ylabel({'Probability';'(Ours)'});
         subaxis(3,1,3, 'Spacing', 0.05, 'PaddingLeft', 0.05, 'PaddingBottom', 0.05);

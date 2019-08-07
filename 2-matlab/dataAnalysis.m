@@ -8,7 +8,7 @@ addpath('D:/4-code/project/VisionRobot/2-matlab/visionProcess/');
 subjectNameVec = [{'Subject_'};{'Amputee_'}];
 placeNameVec = [{'_indoor_set'};{'_outdoor_set'}]; 
 placeName = placeNameVec{1};
-load('D:/4-code/project/VisionRobot/2-matlab/visionProcess/nets/gregnet_5Classes_simu.mat');
+load('D:/4-code/project/VisionRobot/2-matlab/visionProcess/nets/5Classes_Final_gregnet.mat');
 winLen = 7;
 isIndoor = true;
 accuracyFiltVec = zeros(5,8);%classification accuracy
@@ -30,7 +30,7 @@ for k = 1:8
         [actualModes,correctLabels] = DataProcess.initLabelsFromFile([dataPath,fileName]);
         load([dataPath,fileName,'.mat']);
         [predictLabels,decisionLabels,accuracy,filteredLabels,timeStamps] = ...
-            ImgAlgo.classifyImgs(imgAndAngleData,gregnet_5Classes_simu,correctLabels,actualModes,winLen);
+            ImgAlgo.classifyImgs(imgAndAngleData,gregnet,correctLabels,actualModes,winLen);
         accuracyFiltVec(exeNum,k) = accuracy(2);
     end
     mean(accuracyFiltVec(:,k))
