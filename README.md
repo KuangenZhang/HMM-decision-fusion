@@ -9,6 +9,8 @@ Powered prostheses are effective for helping amputees walk in a single environme
 
 You can test the present hmm, rnn, lstm, and gru model directly by running the file: main_offline.py
 
+We have also uploaded the code and data to the codeocean and prepared the environment to run the code. You can run the code online and reproduce the experiments easily without installing any packages. You can view and run the code on: https://codeocean.com/capsule/5201474/tree
+
 ## Run
 
 ```bash
@@ -31,11 +33,11 @@ If you find our work useful in your research, please consider citing:
 ```bash
 @article{zhang_sequential_2019,
 	title = {Sequential decision fusion for environmental classification in assistive walking},
-	urldate = {2019-04-26},
-	journal = {arXiv:1904.11152 [cs]},
-	author = {Zhang, Kuangen and Zhang, Wen and Xiao, Wentao and Liu, Haiyuan and de Silva, Clarence W. and Fu, Chenglong},
-	month = apr,
-	year = {2019}
+	issn = {1534-4320},
+	journal = {IEEE Transactions on Neural Systems and Rehabilitation Engineering},
+	author = {Zhang, K. and Zhang, W. and Xiao, W. and Liu, H. and Silva, C. W. de and Fu, C.},
+	year = {2019},
+	pages = {1--1}
 }
 ```
 
