@@ -35,7 +35,7 @@ def load_h5(file_path, data_name = '/data', label_name = '/label',
         else:
             # The h5 file is generated from the matlab, where the first index is 1.
             # Here I decrease the label by 1 because the first index in python is 0.
-            return f.get(data_name).value, f.get(label_name).value - 1
+            return f.get(data_name)[...], f.get(label_name)[...] - 1
     else:
         return [], []
 
